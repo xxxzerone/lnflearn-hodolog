@@ -21,8 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
 @SpringBootTest
@@ -59,13 +58,13 @@ class PostControllerTest {
                         .content(json)
                 )
                 .andExpect(status().isOk())
-//                .andExpect(content().string(""))
-                .andExpect(jsonPath("$.postId").value(1))
+                .andExpect(content().string(""))
+//                .andExpect(jsonPath("$.postId").value(1))
                 .andDo(print());
     }
 
     @Test
-    @DisplayName("/posts 요청시 title값은 필수다")
+    @DisplayName("글 작성 요청시 title값은 필수다")
     void test2() throws Exception {
         PostCreate request = PostCreate.builder()
                 .content("내용입니다.")
@@ -86,7 +85,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/posts 요청시 DB에 값이 저장된다.")
+    @DisplayName("글 작성 요청시 DB에 값이 저장된다.")
     void test3() throws Exception {
         // given
         PostCreate request = PostCreate.builder()
@@ -98,6 +97,7 @@ class PostControllerTest {
 
         // when
         mockMvc.perform(post("/posts")
+                        .header("authorization", "hodolman")
                         .contentType(APPLICATION_JSON)
                         .content(json)
                 )

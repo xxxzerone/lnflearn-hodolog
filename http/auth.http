@@ -1,0 +1,15 @@
+### 로그인
+
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+    "email": "abcd@gmail.com",
+    "password": "1234"
+}
+
+### 인증 페이지 요청
+
+GET http://localhost:8080/foo
+Content-Type: application/json
+Cookie: SESSION=7164689c-fda0-49c6-8c94-3b3d66f2aea3

@@ -16,7 +16,18 @@ spring:
         one-indexed-parameters: true
         default-page-size: 5
 
+  jpa:
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
+
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:hodolog
     username: sa
+
+jwt:
+  expiration_time: 86400000 #1일
+  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa

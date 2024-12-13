@@ -1,5 +1,6 @@
 package com.hodolog.controller;
 
+import com.hodolog.config.data.UserSession;
 import com.hodolog.request.PostCreate;
 import com.hodolog.request.PostEdit;
 import com.hodolog.request.PostSearch;
@@ -27,12 +28,17 @@ public class PostController {
 
     private final PostService postService;
 
+    @GetMapping("/foo")
+    public Long foo(UserSession userSession) {
+        log.info(">> {}", userSession.getId());
+        return userSession.getId();
+    }
+
     @PostMapping("/posts")
-    public Map<String, Long> post(@RequestBody @Valid PostCreate request) {
+    public void post(@RequestBody @Valid PostCreate request) {
         log.info("request={}", request.toString());
         request.validate();
-        Long postId = postService.write(request);
-        return Map.of("postId", postId);
+        postService.write(request);
     }
 
     @GetMapping("/posts/{postId}")
