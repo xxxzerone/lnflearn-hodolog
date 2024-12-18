@@ -1,6 +1,8 @@
 package com.hodolog.controller;
 
+import com.hodolog.config.AppConfig;
 import com.hodolog.request.Login;
+import com.hodolog.request.Signup;
 import com.hodolog.response.SessionResponse;
 import com.hodolog.service.AuthService;
 import io.jsonwebtoken.Jwts;
@@ -13,15 +15,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.crypto.SecretKey;
+import java.util.Date;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
 
-    private static final String KEY = "aEc1ZG2S9p4CXsEqOkG6t7ibufjy8x+cvhprMlFC2Ag=";
-
     private final AuthService authService;
+    private final AppConfig appConfig;
 
     @PostMapping("/auth/login")
     public SessionResponse login(@RequestBody Login login) {
@@ -42,12 +44,19 @@ public class AuthController {
 //                .build();
 
 //        SecretKey key = Jwts.SIG.HS256.key().build();
-        SecretKey key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(KEY));
+        SecretKey key = Keys.hmacShaKeyFor(appConfig.getJwtKey());
+
         String jws = Jwts.builder()
                 .subject(String.valueOf(userId))
+                .issuedAt(new Date())
                 .signWith(key)
                 .compact();
 
         return new SessionResponse(jws);
+    }
+
+    @PostMapping("/auth/signup")
+    public void signup(@RequestBody Signup signup) {
+        authService.signup(signup);
     }
 }
