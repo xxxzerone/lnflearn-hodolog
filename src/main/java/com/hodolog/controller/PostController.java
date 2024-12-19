@@ -1,6 +1,5 @@
 package com.hodolog.controller;
 
-import com.hodolog.config.data.UserSession;
 import com.hodolog.request.PostCreate;
 import com.hodolog.request.PostEdit;
 import com.hodolog.request.PostSearch;
@@ -12,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 // SSR -> jsp, thymeleaf, mustache, freemarker
 //      -> html rendering
@@ -27,12 +25,6 @@ import java.util.Map;
 public class PostController {
 
     private final PostService postService;
-
-    @GetMapping("/foo")
-    public Long foo(UserSession userSession) {
-        log.info(">> {}", userSession.getId());
-        return userSession.getId();
-    }
 
     @PostMapping("/posts")
     public void post(@RequestBody @Valid PostCreate request) {
