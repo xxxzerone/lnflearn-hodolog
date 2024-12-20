@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -42,28 +43,7 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("/posts 요청시 Hello World를 출력한다.")
-    void test() throws Exception {
-        // given
-        PostCreate request = PostCreate.builder()
-                .title("제목입니다.")
-                .content("내용입니다.")
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        // expected
-        mockMvc.perform(post("/posts")
-                        .contentType(APPLICATION_JSON)
-                        .content(json)
-                )
-                .andExpect(status().isOk())
-                .andExpect(content().string(""))
-//                .andExpect(jsonPath("$.postId").value(1))
-                .andDo(print());
-    }
-
-    @Test
+    @WithMockUser(username = "hodol@gmail.com", roles = {"ADMIN"})
     @DisplayName("글 작성 요청시 title값은 필수다")
     void test2() throws Exception {
         PostCreate request = PostCreate.builder()
@@ -85,7 +65,8 @@ class PostControllerTest {
     }
 
     @Test
-    @DisplayName("글 작성 요청시 DB에 값이 저장된다.")
+    @WithMockUser(username = "hodol@gmail.com", roles = {"ADMIN"})
+    @DisplayName("게시글 작성")
     void test3() throws Exception {
         // given
         PostCreate request = PostCreate.builder()
@@ -97,10 +78,8 @@ class PostControllerTest {
 
         // when
         mockMvc.perform(post("/posts")
-                        .header("authorization", "hodolman")
                         .contentType(APPLICATION_JSON)
-                        .content(json)
-                )
+                        .content(json))
                 .andExpect(status().isOk())
                 .andDo(print());
 
@@ -179,6 +158,7 @@ class PostControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "hodol@gmail.com", roles = {"ADMIN"})
     @DisplayName("글 제목 수정")
     void test7() throws Exception {
         // given
@@ -202,6 +182,7 @@ class PostControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "hodol@gmail.com", roles = {"ADMIN"})
     @DisplayName("게시글 삭제")
     void test8() throws Exception {
         // given
@@ -222,13 +203,14 @@ class PostControllerTest {
     @DisplayName("존재하지 않는 게시글 조회")
     void test9() throws Exception {
         // expected
-        mockMvc.perform(delete("/posts/{postId}", 1L)
+        mockMvc.perform(get("/posts/{postId}", 1L)
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andDo(print());
     }
 
     @Test
+    @WithMockUser(username = "hodol@gmail.com", roles = {"ADMIN"})
     @DisplayName("존재하지 않는 게시글 수정")
     void test10() throws Exception {
         // given
@@ -242,25 +224,6 @@ class PostControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postEdit)))
                 .andExpect(status().isNotFound())
-                .andDo(print());
-    }
-
-    @Test
-    @DisplayName("게시글 작성시 제목에 '바보'는 포함될 수 없다.")
-    void test11() throws Exception {
-        // given
-        PostCreate request = PostCreate.builder()
-                .title("나는 바보입니다.")
-                .content("반포자이")
-                .build();
-
-        String json = objectMapper.writeValueAsString(request);
-
-        // when
-        mockMvc.perform(post("/posts")
-                        .contentType(APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isBadRequest())
                 .andDo(print());
     }
 

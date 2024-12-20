@@ -1,7 +1,5 @@
 package com.hodolog.service;
 
-import com.hodolog.crypto.PasswordEncoder;
-import com.hodolog.crypto.ScryptPasswordEncoder;
 import com.hodolog.domain.User;
 import com.hodolog.exception.AlreadyExistsEmailException;
 import com.hodolog.repository.UserRepository;
@@ -11,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,6 +24,9 @@ class AuthServiceTest {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @AfterEach
     void setUp() {
         userRepository.deleteAll();
@@ -34,7 +36,6 @@ class AuthServiceTest {
     @DisplayName("회원가입 성공")
     void test1() {
         // given
-        PasswordEncoder encoder = new ScryptPasswordEncoder();
         Signup signup = Signup.builder()
                 .email("abc@gmail.com")
                 .password("1234")
@@ -51,7 +52,7 @@ class AuthServiceTest {
         assertEquals("abc@gmail.com", user.getEmail());
 //        assertNotNull(user.getPassword());
 //        assertEquals("1234", user.getPassword());
-        assertTrue(encoder.matches("1234", user.getPassword()));
+        assertTrue(passwordEncoder.matches("1234", user.getPassword()));
         assertEquals("hodolman", user.getName());
     }
 

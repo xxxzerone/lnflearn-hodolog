@@ -12,8 +12,7 @@ public class UserPrincipal extends User {
     public UserPrincipal(com.hodolog.domain.User user) {
         super(user.getEmail(), user.getPassword(),
                 List.of(
-                        new SimpleGrantedAuthority("ROLE_USER")
-//                        new SimpleGrantedAuthority("WRITE")
+                        new SimpleGrantedAuthority("ROLE_ADMIN")
                 ));
         userId = user.getId();
     }
