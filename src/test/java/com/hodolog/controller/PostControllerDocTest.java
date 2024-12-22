@@ -1,9 +1,12 @@
 package com.hodolog.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hodolog.config.HodologMockUser;
 import com.hodolog.domain.Post;
 import com.hodolog.repository.PostRepository;
+import com.hodolog.repository.UserRepository;
 import com.hodolog.request.PostCreate;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,8 +15,6 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.restdocs.payload.PayloadDocumentation;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -38,12 +39,21 @@ public class PostControllerDocTest {
     private PostRepository postRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
 
-//    @BeforeEach
+    @AfterEach
+    void tearDown() {
+        postRepository.deleteAll();
+        userRepository.deleteAll();
+    }
+
+    //    @BeforeEach
 //    void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
 //        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
 //                .apply(documentationConfiguration(restDocumentation))
@@ -78,7 +88,7 @@ public class PostControllerDocTest {
     }
 
     @Test
-    @WithMockUser(username = "hodol@gmail.com", roles = {"ADMIN"})
+    @HodologMockUser
     @DisplayName("글 등록")
     void test2() throws Exception {
         // given

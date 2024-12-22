@@ -1,8 +1,10 @@
 package com.hodolog.service;
 
 import com.hodolog.domain.Post;
+import com.hodolog.domain.User;
 import com.hodolog.exception.PostNotFound;
 import com.hodolog.repository.PostRepository;
+import com.hodolog.repository.UserRepository;
 import com.hodolog.request.PostCreate;
 import com.hodolog.request.PostEdit;
 import com.hodolog.request.PostSearch;
@@ -27,22 +29,33 @@ class PostServiceTest {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @BeforeEach
     void setUp() {
         postRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
     @DisplayName("글 작성")
     void test1() {
         // given
+        User user = User.builder()
+                .name("호돌맨")
+                .email("hodol@gmail.com")
+                .password("1234")
+                .build();
+        userRepository.save(user);
+
         PostCreate postCreate = PostCreate.builder()
                 .title("제목입니다.")
                 .content("내용입니다.")
                 .build();
 
         // when
-        postService.write(postCreate);
+        postService.write(user.getId(), postCreate);
 
         // then
         assertEquals(1L, postRepository.count());
