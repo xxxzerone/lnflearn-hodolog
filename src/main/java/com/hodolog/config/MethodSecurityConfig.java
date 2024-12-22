@@ -1,6 +1,6 @@
 package com.hodolog.config;
 
-import com.hodolog.repository.PostRepository;
+import com.hodolog.repository.post.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,7 +1,7 @@
-package com.hodolog.repository;
+package com.hodolog.repository.post;
 
 import com.hodolog.domain.Post;
-import com.hodolog.request.PostSearch;
+import com.hodolog.request.post.PostSearch;
 
 import java.util.List;
 

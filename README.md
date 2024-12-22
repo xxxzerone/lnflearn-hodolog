@@ -18,3 +18,26 @@
    4. 왜 이런걸로 비번 암호화 하면 안되는지
 3. BCrypt, SCrypt, Argon2
    1. salt 값
+
+### 게시글
+POST /posts  
+GET /posts/{postId}
+
+### 댓글
+POST /comments?postId=1  
+{  
+author: "ho",  
+password: "1234",  
+content: "ASDF"  
+}  
+
+POST /posts/{postId}/comments  
+{  
+   author: "ho",  
+   password: "1234",  
+   content: "ASDF"  
+}  
+1. 첫번째는 댓글이 여러 개 생기면 중복 문제 발생
+2. 두번째는 URL이 길어질 문제가 발생(규모가 커졌을 때, 중간 레이어가 생길 때)
+
+DELETE /comments/{commentsId}

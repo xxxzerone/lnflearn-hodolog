@@ -1,4 +1,4 @@
-package com.hodolog.request;
+package com.hodolog.request.post;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;

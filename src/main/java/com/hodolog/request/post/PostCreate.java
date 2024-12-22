@@ -1,4 +1,4 @@
-package com.hodolog.request;
+package com.hodolog.request.post;
 
 import com.hodolog.exception.InvalidRequest;
 import jakarta.validation.constraints.NotBlank;
